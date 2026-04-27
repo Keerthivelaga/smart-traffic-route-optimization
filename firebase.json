@@ -1,0 +1,30 @@
+{
+  "firestore": {
+    "rules": "config/firebase_rules.rules",
+    "indexes": "config/firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "hosting",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/backend/**",
+        "run": {
+          "serviceId": "smart-traffic-backend",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/api/inference/**",
+        "run": {
+          "serviceId": "smart-traffic-inference",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}

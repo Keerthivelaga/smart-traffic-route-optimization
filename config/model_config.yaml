@@ -1,0 +1,17 @@
+seed: 42
+data:
+  raw_path: data/raw/traffic.csv
+  processed_path: data/processed/features.parquet
+  graph_path: data/graph/road_graph.npz
+training:
+  batch_size: 256
+  epochs: 30
+  learning_rate: 0.0005
+  weight_decay: 0.0001
+  patience: 6
+  n_splits: 5
+  bayes_trials: 20
+inference:
+  max_batch_size: 512
+  batch_timeout_ms: 10
+  cache_ttl_seconds: 30

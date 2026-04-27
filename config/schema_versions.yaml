@@ -1,0 +1,71 @@
+schema_version: 1.0.0
+collections:
+  users:
+    required:
+      - user_id
+      - role
+      - trust_score
+      - reputation
+      - created_at
+      - updated_at
+  traffic_samples:
+    required:
+      - sample_id
+      - user_id
+      - segment_id
+      - latitude
+      - longitude
+      - speed_kph
+      - timestamp
+      - geohash
+  road_segments:
+    required:
+      - segment_id
+      - start_node
+      - end_node
+      - speed_limit
+      - geohash_prefix
+      - geometry
+  congestion_stats:
+    required:
+      - segment_id
+      - window_start
+      - window_end
+      - congestion_score
+      - confidence
+  reports:
+    required:
+      - report_id
+      - user_id
+      - segment_id
+      - report_type
+      - severity
+      - status
+      - created_at
+  leaderboard:
+    required:
+      - user_id
+      - score
+      - rank
+      - period
+  predictions_cache:
+    required:
+      - cache_key
+      - segment_id
+      - horizon_minutes
+      - prediction
+      - created_at
+      - expires_at
+  model_metadata:
+    required:
+      - model_id
+      - version
+      - created_at
+      - metrics
+      - active
+  system_metrics:
+    required:
+      - metric_name
+      - value
+      - timestamp
+      - labels

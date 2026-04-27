@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Build / artifacts
+artifacts/
+data/raw/*
+data/processed/*
+data/graph/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/graph/.gitkeep
+models/
+mlruns/
+checkpoints/
+*.onnx
+*.tflite
+*.pt
+*.pth
+*.joblib
+*.npz
+
+# Logs
+logs/*.log
+logs/*.jsonl
+
+# Secrets and cloud credentials
+serviceAccountKey.json
+serviceAccountKey.json.json
+smart-traffic-system-82a26-firebase-adminsdk-fbsvc-30136ebd94.json
+google-services.json
+kaggle.json
+*.pem
+*.key
+.env
+.env.*
+
+# Firebase local config
+.firebase/
+firestore-debug.log
+ui-debug.log
+
+# Android local machine config
+android_app/local.properties
+android_app/.gradle/
+android_app/**/build/
+
+# Gradle/Android build outputs across all modules
+**/.gradle/
+**/build/

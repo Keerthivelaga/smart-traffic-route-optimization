@@ -1,0 +1,66 @@
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: smart-traffic
+  _SERVICE: smart-traffic-backend
+  _MIN_INSTANCES: "0"
+  _MAX_INSTANCES: "20"
+  _CPU: "2"
+  _MEMORY: "2Gi"
+  _CONCURRENCY: "80"
+
+steps:
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        gcloud artifacts repositories describe ${_REPOSITORY} --location=${_REGION} >/dev/null 2>&1 || \
+        gcloud artifacts repositories create ${_REPOSITORY} \
+          --repository-format=docker \
+          --location=${_REGION} \
+          --description="Smart Traffic services"
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - deploy/cloudrun/backend/Dockerfile
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --region=${_REGION}
+      - --platform=managed
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+      - --allow-unauthenticated
+      - --min-instances=${_MIN_INSTANCES}
+      - --max-instances=${_MAX_INSTANCES}
+      - --cpu=${_CPU}
+      - --memory=${_MEMORY}
+      - --concurrency=${_CONCURRENCY}
+      - --set-env-vars=ENV=prod,FIREBASE_PROJECT_ID=$PROJECT_ID,HMAC_SECRET=change_me
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud run services add-iam-policy-binding ${_SERVICE} \
+          --region=${_REGION} \
+          --member=allUsers \
+          --role=roles/run.invoker || true
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID

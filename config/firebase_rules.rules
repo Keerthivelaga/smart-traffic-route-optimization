@@ -1,0 +1,100 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedRequest() {
+      return request.auth != null;
+    }
+
+    function hasRole(required) {
+      return signedRequest() &&
+        request.auth.token.roles != null &&
+        required in request.auth.token.roles;
+    }
+
+    function isOwner(userId) {
+      return signedRequest() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    function isOps() {
+      return hasRole('ops');
+    }
+
+    function isService() {
+      return hasRole('service');
+    }
+
+    function canOperate() {
+      return isAdmin() || isOps() || isService();
+    }
+
+    function hasRequired(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) || isAdmin();
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /traffic_samples/{docId} {
+      allow read: if canOperate() || hasRole('user');
+      allow create: if signedRequest() &&
+        hasRequired(request.resource.data, [
+          'sample_id', 'user_id', 'segment_id', 'latitude', 'longitude',
+          'speed_kph', 'heading_deg', 'accuracy_m', 'timestamp', 'geohash'
+        ]) &&
+        request.resource.data.user_id == request.auth.uid &&
+        request.resource.data.latitude is number &&
+        request.resource.data.longitude is number &&
+        request.resource.data.speed_kph is number;
+      allow update, delete: if canOperate();
+    }
+
+    match /road_segments/{docId} {
+      allow read: if signedRequest();
+      allow write: if isAdmin() || isOps();
+    }
+
+    match /congestion_stats/{docId} {
+      allow read: if signedRequest();
+      allow write: if canOperate();
+    }
+
+    match /reports/{docId} {
+      allow read: if signedRequest();
+      allow create: if signedRequest() &&
+        hasRequired(request.resource.data, [
+          'report_id', 'user_id', 'segment_id', 'report_type', 'severity', 'status'
+        ]) &&
+        (request.resource.data.user_id == request.auth.uid || canOperate()) &&
+        request.resource.data.severity is int;
+      allow update, delete: if canOperate();
+    }
+
+    match /leaderboard/{docId} {
+      allow read: if signedRequest();
+      allow write: if isAdmin();
+    }
+
+    match /predictions_cache/{docId} {
+      allow read: if signedRequest();
+      allow write: if canOperate();
+    }
+
+    match /model_metadata/{docId} {
+      allow read: if signedRequest();
+      allow write: if isAdmin() || hasRole('mlops') || isService();
+    }
+
+    match /system_metrics/{docId} {
+      allow read: if isAdmin() || isOps();
+      allow write: if canOperate();
+    }
+  }
+}
