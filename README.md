@@ -31,7 +31,7 @@ routing into a unified Android application.
   </tr>
   <tr>
     <td><img width="300" src="https://github.com/user-attachments/assets/78bba8d1-68a1-42fb-a2c7-fdeea010a890" /></td>
-    <td><img width="447" src="https://github.com/user-attachments/assets/01dd69d9-b67b-47a3-b624-ff3d574f07a1" />
+    <td><img width="300" src="https://github.com/user-attachments/assets/01dd69d9-b67b-47a3-b624-ff3d574f07a1" />
 </td>
   </tr>
 </table>
