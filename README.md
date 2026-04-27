@@ -8,7 +8,7 @@ routing into a unified Android application.
 
 ## 📱 Screenshots
 
-> Onboarding <img width="447" height="815" alt="image" src="https://github.com/user-attachments/assets/4a768a3a-63e5-414a-a98c-b5910cd5275a" /> → Map <img width="447" height="815" alt="image" src="https://github.com/user-attachments/assets/fa0c3ac9-b797-449b-ace0-201c93ab3ab0" />
+> Onboarding <img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/4a768a3a-63e5-414a-a98c-b5910cd5275a" /> → Map <img width="300" height="700" alt="image" src="https://github.com/user-attachments/assets/fa0c3ac9-b797-449b-ace0-201c93ab3ab0" />
 → Navigation <img width="447" height="813" alt="image" src="https://github.com/user-attachments/assets/18850799-e313-4114-a800-aed2878a17e1" /> → Analytics <img width="447" height="815" alt="image" src="https://github.com/user-attachments/assets/b35558a0-91ab-4069-91df-51b9ee8a5692" />
 → Leaderboard <img width="447" height="815" alt="image" src="https://github.com/user-attachments/assets/78bba8d1-68a1-42fb-a2c7-fdeea010a890" />
 
